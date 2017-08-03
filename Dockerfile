@@ -1,17 +1,4 @@
-FROM jruby:9-alpine AS builder
-RUN mkdir /app && \
-    apk --no-cache update && \
-    apk --no-cache upgrade && \
-    apk add git curl && \
-    gem install bundler
-RUN mkdir -p /usr/share/hunspell/ && \
-    curl https://cgit.freedesktop.org/libreoffice/dictionaries/plain/ru_RU/ru_RU.{dic,aff} -o "/usr/share/hunspell/ru_RU.#1"
-COPY Gemfile /app/
-COPY Gemfile.lock /app/
-WORKDIR /app
-RUN bundle install
-
-FROM jruby:9-alpine AS runtime
+FROM jruby:9-alpine
 LABEL maintainer="Andrey Novikov <envek@evilmartians.com>"
 
 ENV RACK_ENV=production PORT=5000
@@ -19,11 +6,17 @@ ENV RACK_ENV=production PORT=5000
 RUN  mkdir /app && \
      apk --no-cache update && \
      apk --no-cache upgrade && \
-     apk add hunspell curl && \
+     apk add hunspell curl git && \
      gem install bundler
 
-COPY --from=builder /usr/share/hunspell/ /usr/share/hunspell/
-COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+RUN mkdir -p /usr/share/hunspell/ && \
+   curl 'https://cgit.freedesktop.org/libreoffice/dictionaries/plain/ru_RU/ru_RU.{dic,aff}' -o '/usr/share/hunspell/ru_RU.#1'
+
+WORKDIR /app
+
+COPY Gemfile /app/
+COPY Gemfile.lock /app/
+RUN bundle install
 
 ADD . /app
 WORKDIR /app
