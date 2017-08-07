@@ -23,4 +23,8 @@ RSpec.describe Spellchecker do
   it "doesn't replace unknown words without suggestions" do
     expect(subject.call('йцукенгшщзх')).to eq('йцукенгшщзх')
   end
+
+  it "removes unknown characters for dictionary encoding" do
+    expect(subject.call("New Balance Men’s Essentials Plus Pullover\n")).to eq("New Balance Men’s Essentials Plus Pullover")
+  end
 end

@@ -21,7 +21,7 @@ class Spellchecker
   private
 
   def correct(word)
-    encoded_word = word.encode(@dict.encoding)
+    encoded_word = word.encode(@dict.encoding, invalid: :replace, undef: :replace, replace: '')
     return word if @dict.check?(encoded_word)
     @dict.suggest(encoded_word).first&.encode(__ENCODING__) || word
   end
