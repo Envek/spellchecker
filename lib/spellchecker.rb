@@ -10,6 +10,7 @@ class Spellchecker
     @dict = FFI::Hunspell.dict('ru_RU')
     return unless custom_dictionary
     @dict.add_dic(custom_dictionary)
+    ObjectSpace.define_finalizer(self, proc { @dict.close })
   end
 
   # @param query [String] A string to check and correct

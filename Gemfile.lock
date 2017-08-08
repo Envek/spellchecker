@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/Envek/ffi-hunspell
-  revision: e438685c645bf2452afe54864eb20c87ce31efe1
+  revision: 2d846e6f89860747d4729cb4e06cf27c28f0c760
   branch: add_dic_support_continued
   specs:
     ffi-hunspell (0.4.0)
